@@ -8,6 +8,7 @@ from flask import Flask, Response, g, jsonify, request, send_from_directory
 from prometheus_client import CONTENT_TYPE_LATEST, Counter, Histogram, generate_latest
 
 app = Flask(__name__, static_folder="static")
+# Cambio para probar la pipeline de Cloud Build
 DATABASE = os.environ.get("DATABASE_PATH", "data/incidents.db")
 
 
