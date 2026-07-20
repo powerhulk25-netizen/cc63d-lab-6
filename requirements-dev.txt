@@ -1,4 +1,5 @@
 # Herramientas de desarrollo y CI (no van en la imagen de producción).
 -r requirements.txt
 pytest==8.3.4
+# Instala Ruff, un linter.
 ruff==0.8.6
