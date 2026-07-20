@@ -1,0 +1,34 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'southamerica-west1-docker.pkg.dev/$PROJECT_ID/monolito/incidentes:$COMMIT_SHA'
+      - '.'
+
+  - name: 'python:3.12-slim'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        pip install --no-cache-dir -r requirements-dev.txt
+        pytest
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'southamerica-west1-docker.pkg.dev/$PROJECT_ID/monolito/incidentes:$COMMIT_SHA'
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'incidentes'
+      - '--image=southamerica-west1-docker.pkg.dev/$PROJECT_ID/monolito/incidentes:$COMMIT_SHA'
+      - '--region=southamerica-west1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+
+images:
+  - 'southamerica-west1-docker.pkg.dev/$PROJECT_ID/monolito/incidentes:$COMMIT_SHA'
